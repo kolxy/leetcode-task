@@ -2,10 +2,10 @@
 
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
-| 05/18 | Wednesday | [Done](#0518) |
-| 05/19 | Thursday | [Not started](#0519) |
+| 05/18 | Wednesday | [Done](#05/18) |
+| 05/19 | Thursday | [Not started](#05/19) |
 
-# 05/18 {#0518}
+# 05/18
 
 ## 912. [Sort an Array](https://leetcode.com/problems/sort-an-array/)
 
@@ -81,6 +81,5 @@ class Solution:
         return nums
 ```
 
-# 05/19 {#0519}
-
+# 05/19 
 还没开始

@@ -2,8 +2,8 @@
 
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
-| 05/18 | Wednesday | [Done](#05/18) |
-| 05/19 | Thursday | [Not started](#05/19) |
+| 05/18 | Wednesday | [Done](#0518) |
+| 05/19 | Thursday | [Not started](#0519) |
 
 # 05/18
 

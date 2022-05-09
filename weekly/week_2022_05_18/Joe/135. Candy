@@ -1,0 +1,35 @@
+c#
+
+public class Solution {
+    public int Candy(int[] ratings) {
+        //1 2 2 3 1 4 5 3
+        //1 2 1 2 1 2 3 1
+        if(ratings.Length == 1)
+            return 1;
+        int[] dp = new int[ratings.Length];
+        Array.Fill(dp,1);
+        
+        for(int i=1;i<ratings.Length;i++)
+        {
+            if(ratings[i] > ratings[i -1])
+            {
+                dp[i] = dp[i-1] + 1;   
+                
+            }
+            
+            //Console.WriteLine("i = {0}, val = {1}",ratings[i], dp[i]);
+        }
+        
+        for(int i=ratings.Length -2;i>=0;i--)
+        {
+            if(ratings[i] > ratings[i +1] && dp[i] <= dp[i+1])
+            {
+                dp[i] = dp[i+1] + 1;   
+                
+            }        
+            //Console.WriteLine("**i = {0}, val = {1}",ratings[i], dp[i]);    
+        }
+        
+        return dp.Sum();
+    }
+}

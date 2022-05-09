@@ -6,4 +6,4 @@
 - rule 3
 
 ## Format sample
-[Link](weekly/week_2022_05_18/Max/README.md)
+[Link](weekly/week_2022_05_18/Max)

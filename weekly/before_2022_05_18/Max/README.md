@@ -2,7 +2,7 @@
 
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
-| 05/09 | Monday | [Done](#0519) |
+| 05/09 | Monday | [Done](#0509) |
 | 05/10 | Tuesday | |
 | 05/11 | Wedensday |  |
 | 05/12 | Thursday | |

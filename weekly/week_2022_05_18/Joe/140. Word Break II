@@ -1,0 +1,33 @@
+public class Solution {
+    public IList<string> WordBreak(string s, IList<string> wordDict) {
+        HashSet<string> hs = new HashSet<string>(wordDict);
+        
+        List<string> res = new List<string>();
+        
+        DFS(0, new List<string>());
+        
+        return res;
+        
+        void DFS(int start, List<string> str)
+        {
+            if(start == s.Length)
+            {
+                res.Add(string.Join(' ', str));
+                return;
+            }
+            
+            for(int i=start;i<s.Length;i++)
+            {
+                foreach(var w in hs)
+                {
+                    if(i - start +1 == w.Length && s.Substring(start, i-start +1) == w)
+                    {
+                        str.Add(w);
+                        DFS(i +1, str);
+                        str.RemoveAt(str.Count -1);
+                    }
+                }
+            }
+        }
+    }
+}

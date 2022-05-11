@@ -3,7 +3,7 @@
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
 | 05/09 | Monday | [Done](#0509) |
-| 05/10 | Tuesday | [Not started](#0510) |
+| 05/10 | Tuesday | [Done](#0510) |
 | 05/11 | Wedensday | [Not started](#0511) |
 | 05/12 | Thursday | [Not started](#0512) |
 | 05/13 | Friday | [Not started](#0513) |
@@ -57,4 +57,57 @@ class Solution:
             return length
         return length + 1
             
+```
+
+# 05/10
+
+## 44. [Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
+
+Problem
+
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where:
+
+'?' Matches any single character.
+
+'*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+![fig2](./img/leet44.png)
+### Python
+```python
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        # Dynamic programming
+        # Method cited from the solution of leetcode
+        slen = len(s)
+        plen = len(p)
+        
+        if p == s or set(p) == {'*'}:
+            return True
+        if p == '' or s == '':
+            return False
+        
+        d = [[False] * (slen + 1) for _ in range(plen + 1)]
+        d[0][0] = True
+        for p_idx in range(1, plen + 1):
+            # print(p)
+            # print(p_idx-1)
+            if p[p_idx - 1] == '*':
+                s_idx = 1
+                
+                while not d[p_idx - 1][s_idx - 1] and s_idx < slen + 1:
+                    s_idx += 1
+                d[p_idx][s_idx - 1] = d[p_idx - 1][s_idx - 1]
+                
+                while s_idx < slen + 1:
+                    d[p_idx][s_idx] = True
+                    s_idx += 1
+            elif p[p_idx - 1]== '?':
+                for s_idx in range(1, slen+1):
+                    d[p_idx][s_idx] = d[p_idx - 1][s_idx - 1]
+            else:
+                for s_idx in range(1, slen+1):
+                    d[p_idx][s_idx] = d[p_idx - 1][s_idx - 1] and p[p_idx -1]== s[s_idx - 1]
+        return d[plen][slen]
 ```

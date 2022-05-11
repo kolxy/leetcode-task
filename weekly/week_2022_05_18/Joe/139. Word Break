@@ -1,0 +1,22 @@
+public class Solution {
+    public bool WordBreak(string s, IList<string> wordDict) {
+        HashSet<string> hs = new HashSet<string>(wordDict);
+        bool[] dp = new bool[s.Length +1];
+        dp[s.Length] = true;
+        
+        for(int i=s.Length -1;i>=0;i--)
+        {
+            foreach(var w in hs)
+            {
+                if(w.Length <= s.Length -i && w == s.Substring(i, w.Length))
+                    dp[i] = dp[i + w.Length];
+                if(dp[i])
+                    break;
+            }
+            
+           // Console.WriteLine("i = {0}, dpi ={1}",i, dp[i]);
+        }
+        
+        return dp[0];
+    }
+}

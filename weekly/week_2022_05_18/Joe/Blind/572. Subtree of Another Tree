@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public bool IsSubtree(TreeNode root, TreeNode subRoot) {
+        
+        List<TreeNode> proots = new List<TreeNode>();
+        DFS(root);
+        
+        for(int i=0;i<proots.Count;i++)
+        {
+            if(Compare(proots[i], subRoot))
+                return true;
+        }
+        return false;
+        
+        bool Compare(TreeNode parent, TreeNode sub)
+        {
+            if(parent == null && sub == null)
+                return true;
+            
+            if(parent != null && sub != null)
+            {
+                if(parent.val == sub.val)
+                    return Compare(parent.left,sub.left) && Compare(parent.right, sub.right);
+            }
+            
+            return false;
+        }
+        
+        
+        void DFS(TreeNode node)
+        {
+            if(node == null)
+                return;
+            
+            if(node.val == subRoot.val)
+                proots.Add(node);
+            
+            DFS(node.left);
+            DFS(node.right);
+        }
+    }
+}

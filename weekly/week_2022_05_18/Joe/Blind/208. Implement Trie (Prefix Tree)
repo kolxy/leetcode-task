@@ -1,0 +1,61 @@
+public class Trie {
+
+    Node root;
+    public Trie() {
+        root = new Node();
+    }
+    
+    public void Insert(string word) {
+        Node cur = root;
+        for(int i=0;i<word.Length;i++)
+        {
+            if(cur.nexts[word[i] - 'a'] == null)
+                cur.nexts[word[i] - 'a'] = new Node();
+            cur.nexts[word[i] - 'a'].c = word[i];
+            cur = cur.nexts[word[i] - 'a'];
+        }
+        cur.isaword = true;
+    }
+    
+    public bool Search(string word) {
+        Node cur = root;
+        for(int i=0;i<word.Length;i++)
+        {
+            if(cur.nexts[word[i] - 'a'] == null || cur.nexts[word[i] - 'a'].c != word[i])
+                return false;
+            cur = cur.nexts[word[i] - 'a'];
+        }
+        if(!cur.isaword)
+            return false;
+        
+        return true;
+    }
+    
+    public bool StartsWith(string prefix) {
+        Node cur = root;
+        for(int i=0;i<prefix.Length;i++)
+        {
+            if(cur.nexts[prefix[i] - 'a'] == null || cur.nexts[prefix[i] - 'a'].c != prefix[i])
+                return false;
+            cur = cur.nexts[prefix[i] - 'a'];
+        }
+        
+        return true;
+    }
+}
+
+public class Node
+{    
+    public char c;
+    public bool isaword = false;
+    public Node[] nexts= new Node[26];
+   
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.Insert(word);
+ * bool param_2 = obj.Search(word);
+ * bool param_3 = obj.StartsWith(prefix);
+ */

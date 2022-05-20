@@ -1,0 +1,156 @@
+public class MedianFinder {
+
+    Heap minheap;
+    Heap maxheap;
+    public MedianFinder() {
+        minheap = new Heap(Heap.SortType.Min);
+        maxheap = new Heap(Heap.SortType.Max);
+    }
+    
+    public void AddNum(int num) {
+        minheap.Insert(num);
+        maxheap.Insert(minheap.Pop());
+        if(minheap.Size < maxheap.Size)
+            minheap.Insert(maxheap.Pop());
+        
+    }
+    
+    public double FindMedian() {
+        double res = 0;
+        if(minheap.Size == maxheap.Size)
+            res = (minheap.Peek() + maxheap.Peek())/2.0;
+        else
+            res = minheap.Peek();
+        return res;
+    }
+    
+    
+}
+
+public class Heap
+{
+    public enum SortType
+    {
+        Min,
+        Max
+    }
+    
+    public int Size =0;
+    private int[] _heap = new int[1];
+    private SortType _sortType;
+    
+    public Heap(SortType type)
+    {
+        _sortType = type;
+    }
+    
+    private void Resize()
+    {
+        if(Size == _heap.Length)
+        {
+            int[] newheap = new int[_heap.Length *2];
+            Array.Copy(_heap, newheap, Size);
+            _heap = newheap;
+        }
+    }
+    
+    public void Insert(int num)
+    {
+        Resize();
+        _heap[Size] = num;
+        BubbleUp(Size);
+        Size++;
+    }
+    
+    public int Peek()
+    {
+        return Size == 0? int.MinValue: _heap[0];
+    }
+    //Max heap pop max value, Min heap pop min value
+    public int Pop()
+    {
+        if(Size ==0)
+            return int.MinValue;
+        int res = _heap[0];
+        Size--;
+        _heap[0] = _heap[Size]; 
+        BubbleDown(0);
+        
+        return res;
+    }
+    
+    private void BubbleUp(int index)
+    {
+        if(index == 0)
+            return;
+        
+        int offset = index%2 == 0? 2:1;
+        int pi = (index-offset)/2;
+        if(_sortType == SortType.Min)
+        {
+            //parent smaller than children
+            if(_heap[pi] > _heap[index])
+            {
+                SwapAB(pi,index);
+                BubbleUp(pi);
+            }
+        }
+        else if(_sortType == SortType.Max)
+        {
+            //parent bigger than children
+            if(_heap[pi] < _heap[index])
+            {
+                SwapAB(pi,index);
+                BubbleUp(pi);
+            }
+        }
+    }
+    
+    private void BubbleDown(int index)
+    {
+        if(index > Size/2 -1)
+            return;
+        
+        int cli = index * 2 +1;
+        int cri = index *2 +2;
+        if(_sortType == SortType.Min)
+        {            
+            //parent smaller than children
+            if(_heap[cli] < _heap[index] || _heap[cri] < _heap[index] )
+            {
+                int ind = _heap[cli] > _heap[cri]? cri: cli;
+                SwapAB(ind, index);
+                BubbleDown(ind);
+            }
+        }
+        else if(_sortType == SortType.Max)
+        {
+            //parent bigger than children
+            if(_heap[cli] > _heap[index] || _heap[cri] > _heap[index] )
+            {
+                int ind = _heap[cli] < _heap[cri]? cri: cli;
+                SwapAB(ind, index);
+                BubbleDown(ind);
+            }
+        }
+    }
+    
+    private void SwapAB(int indexA, int indexB)
+    {
+        if(indexA <= Size && indexB <= Size)
+        {
+            int temp = _heap[indexA];
+            _heap[indexA] = _heap[indexB];
+            _heap[indexB] = temp;
+        }
+    }
+    
+    
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.AddNum(num);
+ * double param_2 = obj.FindMedian();
+ */

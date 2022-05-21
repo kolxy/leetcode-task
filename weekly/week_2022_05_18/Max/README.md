@@ -68,6 +68,10 @@ class Solution {
 
 
 # 05/19 
+
+## 215. [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+Bucket sort 
+Time complexity: O(n)
 ```java
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {

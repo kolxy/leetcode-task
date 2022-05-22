@@ -3,47 +3,59 @@
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
 | 05/18 | Wednesday | [Done](#0518) |
-| 05/19 | Thursday | [Not started](#0519) |
+| 05/19 | Thursday | [Done](#0519) |
+| 05/19 | Friday | [Done](#0520) |
 
 # 05/18
 
-## 912. [Sort an Array](https://leetcode.com/problems/sort-an-array/)
+## 215. [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
 
-Simply quicksort
+Priority Queue
 
-You may also add images to help with your explanation.
+Time complexity: O(nlogn)
 
-![fig1](./img/Quicksort.png)
-
-### Java
+### Heap/PriorityQueue
 ```java
 class Solution {
-    public int[] sortArray(int[] nums) {
-        sort(nums, 0, nums.length - 1);
-        return nums;
-    }
-
-    public void sort(int[] nums, int left, int right) {
-        if (left >= right) {
-            return;
-            
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue(Collections.reverseOrder());
+        for (int num : nums) {
+            pq.offer(num);
         }
-        random_pivot(nums, left, right);
+        for (int i = 1; i < k; i++) {
+            pq.poll();
+        }
+        return pq.poll();
+    }
+}
+```
+
+### Quick Select
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, k - 1);
+    }
+    
+    public int quickSelect(int[] nums, int left, int right, int target) {
+        if (left == right) {
+            return nums[left];
+        }
         int pointer = left;
         for (int i = left; i < right; i++) {
-            if (nums[i] <= nums[right]) {
-                swap(nums, pointer, i);
+            if (nums[i] >= nums[right]) {
+                swap(nums, i, pointer);
                 pointer++;
             }
         }
         swap(nums, pointer, right);
-        sort(nums, left, pointer - 1);
-        sort(nums, pointer + 1, right);
-    }
-    
-    public void random_pivot(int[] nums, int left, int right) {
-        int pivot = new Random().nextInt(right - left + 1) + left;
-        swap(nums, pivot, right);
+        if (pointer == target) {
+            return nums[target];
+        } else if (pointer > target) {
+            return quickSelect(nums, left, pointer - 1, target);
+        } else {
+            return quickSelect(nums, pointer + 1, right, target);
+        }
     }
     
     public void swap(int[] nums, int a, int b) {
@@ -54,32 +66,66 @@ class Solution {
 }
 ```
 
-### Python
-```python
-class Solution:
-    def randomized_partition(self, nums, l, r):
-        pivot = random.randint(l, r)
-        nums[pivot], nums[r] = nums[r], nums[pivot]
-        i = l - 1
-        for j in range(l, r):
-            if nums[j] < nums[r]:
-                i += 1
-                nums[j], nums[i] = nums[i], nums[j]
-        i += 1
-        nums[i], nums[r] = nums[r], nums[i]
-        return i
 
-    def randomized_quicksort(self, nums, l, r):
-        if r - l <= 0:
-            return
-        mid = self.randomized_partition(nums, l, r)
-        self.randomized_quicksort(nums, l, mid - 1)
-        self.randomized_quicksort(nums, mid + 1, r)
-
-    def sortArray(self, nums: List[int]) -> List[int]:
-        self.randomized_quicksort(nums, 0, len(nums) - 1)
-        return nums
-```
 
 # 05/19 
-还没开始
+
+## 215. [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+Bucket sort 
+Time complexity: O(n)
+```java
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        
+        List<Integer>[] counts = new ArrayList[nums.length];
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int count = entry.getValue();
+            if (counts[count - 1] == null) {
+                counts[count - 1] = new ArrayList<>();
+            }
+            counts[count - 1].add(entry.getKey());
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        for (int i = counts.length - 1; i >= 0; i--) {
+            if (counts[i] != null) {
+                res.addAll(counts[i]);
+            }
+            if (res.size() >= k) {
+                return res.stream().mapToInt(Integer::intValue).toArray();
+            }
+        }
+        return res.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
+```
+
+# 05/20
+
+## 162. [Find Peak Element](https://leetcode.com/problems/find-peak-element/)
+
+Binary Search
+
+```java
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if ((mid - 1) >= left && nums[mid - 1] > nums[mid]) {
+                right = mid - 1;
+            } else if ((mid + 1) <= right && nums[mid + 1] > nums[mid]) {
+                left = mid + 1;
+            } else {
+                return mid;
+            }
+        }
+        return left;
+    }
+}
+```

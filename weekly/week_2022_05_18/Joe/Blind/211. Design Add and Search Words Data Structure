@@ -1,0 +1,79 @@
+public class WordDictionary {
+
+    Node root;
+    public WordDictionary() {
+        root = new Node();
+    }
+    
+    public void AddWord(string word) {
+        Node cur = root;
+        for(int i=0;i<word.Length;i++)
+        {
+            if(cur.nexts[word[i] - 'a'] == null)
+                cur.nexts[word[i] - 'a'] = new Node();
+            cur.nexts[word[i] - 'a'].c = word[i];
+            cur = cur.nexts[word[i] - 'a'];
+        }
+        cur.isaword = true;
+    }
+    
+    public bool Search(string word) {
+        Node cur = root;
+       // Console.WriteLine("word={0}", word);
+        return Helper(0);
+        
+        bool Helper(int index)
+        {
+           // Console.WriteLine("index={0},cur value = {1}", index, cur.c);
+            if(index == word.Length)
+            {
+                //Console.WriteLine("is a word = {0}", cur.isaword);
+                return cur.isaword; 
+            }
+                
+            
+            if(word[index] != '.')
+            {
+                if(cur.nexts[word[index] - 'a'] == null || word[index] != cur.nexts[word[index] - 'a'].c)
+                    return false;
+                else
+                {
+                    cur = cur.nexts[word[index] - 'a'];
+                    return Helper(index +1);
+                }
+            }
+            else
+            {
+                for(int i=0;i<26;i++)
+                {
+                    bool rs = false;
+                    if(cur.nexts[i] != null)
+                    {
+                        Node old = cur;
+                        cur = cur.nexts[i];
+                        rs = Helper(index +1);
+                        cur = old;
+                        if(rs)
+                            return rs;
+                    }
+                }
+            }
+            
+                //Console.WriteLine("word = {0}", cur.isaword);
+            return false;
+        }
+    }
+}
+
+public class Node
+{
+    public char c;
+    public bool isaword =false;
+    public Node[] nexts = new Node[26];
+}
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.AddWord(word);
+ * bool param_2 = obj.Search(word);
+ */

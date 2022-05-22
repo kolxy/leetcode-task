@@ -1,0 +1,96 @@
+public class LRUCache {
+
+    Dictionary<int,Node> map;
+    int cap = 0;
+    Node head, tail;
+    public LRUCache(int capacity) {
+        cap = capacity; 
+        map = new Dictionary<int,Node>();
+    }
+    
+    public int Get(int key) {
+        if(map.ContainsKey(key))
+        {
+            Node n = map[key];
+            Remove(n);
+            Put(n.key,n.val);
+            return n.val;
+        }
+        else
+            return -1;
+    }
+    
+    public void Put(int key, int value) {
+        if(!map.ContainsKey(key))
+        {
+            Node node = new Node(key, value);
+        
+            if(map.Count >= cap)
+                Remove(tail);
+
+            if(map.Count ==0)
+            {
+                head = node;
+                tail = node;
+            }
+            else
+            {
+                node.next = head;
+                head.previous = node;
+                head = node;
+            }
+
+            map.Add(key, node);            
+        }
+        else
+        {
+            Node old = map[key];
+            Remove(old);
+            Put(key,value);
+        }
+    }
+    
+    void Remove(Node n)
+    {
+        if(n.next == null)
+        {
+            tail = n.previous;
+            if(n.previous != null)
+                n.previous.next = null;
+        }
+        else if(n.previous == null)
+        {
+            head = n.next;
+            if(n.next != null)
+                n.next.previous = null;
+        }
+        else
+        {
+            n.previous.next = n.next;
+            n.next.previous = n.previous;
+        }
+        
+        map.Remove(n.key);
+    }
+}
+
+public class Node
+{
+    public int key;
+    public int val;
+    public Node previous = null;
+    public Node next = null;
+    
+    public Node(int _key =-1, int _val =-1)
+    {
+        key = _key;
+        val = _val;
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.Get(key);
+ * obj.Put(key,value);
+ */

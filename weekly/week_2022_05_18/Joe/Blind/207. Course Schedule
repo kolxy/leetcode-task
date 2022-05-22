@@ -1,52 +1,53 @@
 public class Solution {
-    public IList<IList<int>> PacificAtlantic(int[][] heights) {
-        List<IList<int>> res = new List<IList<int>>();
-        
-        int m = heights.Length;
-        int n = heights[0].Length;
-        
-        HashSet<string> po = new HashSet<string>();
-        HashSet<string> ao = new HashSet<string>();
-        
-        for(int i=0;i<m;i++)
+    public bool CanFinish(int numCourses, int[][] prerequisites) {
+        if(prerequisites.Length ==0)
+            return true;
+        HashSet<int> visited = new HashSet<int>();
+        List<int>[] dic = new List<int>[numCourses];
+        for(int i=0;i<prerequisites.Length;i++)
         {
-           DFS(i,0,po,heights[i][0]);
-           DFS(i,n-1,ao,heights[i][n-1]);
+            int c = prerequisites[i][0];
+            if(dic[c] == null)
+                dic[c] = new List<int>();
+            
+            dic[c].Add(prerequisites[i][1]);
         }
         
-        for(int j=0;j<n;j++)
-        {            
-           DFS(0,j,po,heights[0][j]);
-           DFS(m-1,j,ao,heights[m-1][j]);
+        for(int i=0;i<dic.Length;i++)
+        {
+            if(!DFS(i))
+                return false;
         }
         
-        foreach(var v in po)
+        return true;
+        
+        bool DFS(int course)
         {
-            if(ao.Contains(v))
+            if(dic[course] == null || dic[course].Count == 0)
+                return true;
+            
+            if(visited.Contains(course))
+                return false;
+            else
+                visited.Add(course);
+            
+            while(dic[course].Count>0)
             {
-                string[] ss = v.Split(',');
-                res.Add(new List<int>(){Convert.ToInt32(ss[0]), Convert.ToInt32(ss[1])});
+                bool rs = DFS(dic[course][0]);
+                if(rs)
+                    dic[course].RemoveAt(0);
+                else
+                    return false;
             }
+            
+            return true;
         }
-        return res;
-        // 1 2 3
-        // 8 9 4
-        // 7 6 5
-        
-        void DFS(int row,int col, HashSet<string> sets, int predata)
-        {
-            if(row <0 || col <0 || row ==m || col ==n || sets.Contains(row.ToString() +"," + col))
-                return;
-            if(heights[row][col] >= predata)
-            {
-            //Console.WriteLine("row ={0},col={1}",row,col);
-                sets.Add(row.ToString() +"," + col);
-                DFS(row+1, col, sets,heights[row][col]);
-                DFS(row-1, col, sets,heights[row][col]);
-                DFS(row, col+1, sets,heights[row][col]);
-                DFS(row, col-1, sets,heights[row][col]);
-            }
-        }
-        
     }
 }
+
+//HashSet save visited course
+//0==>1,2
+//1==>2
+//2 ==>3
+//3==>[]
+//0 ==> 1 if(need course is in visited, false)

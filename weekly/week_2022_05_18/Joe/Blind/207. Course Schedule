@@ -1,0 +1,53 @@
+public class Solution {
+    public bool CanFinish(int numCourses, int[][] prerequisites) {
+        if(prerequisites.Length ==0)
+            return true;
+        HashSet<int> visited = new HashSet<int>();
+        List<int>[] dic = new List<int>[numCourses];
+        for(int i=0;i<prerequisites.Length;i++)
+        {
+            int c = prerequisites[i][0];
+            if(dic[c] == null)
+                dic[c] = new List<int>();
+            
+            dic[c].Add(prerequisites[i][1]);
+        }
+        
+        for(int i=0;i<dic.Length;i++)
+        {
+            if(!DFS(i))
+                return false;
+        }
+        
+        return true;
+        
+        bool DFS(int course)
+        {
+            if(dic[course] == null || dic[course].Count == 0)
+                return true;
+            
+            if(visited.Contains(course))
+                return false;
+            else
+                visited.Add(course);
+            
+            while(dic[course].Count>0)
+            {
+                bool rs = DFS(dic[course][0]);
+                if(rs)
+                    dic[course].RemoveAt(0);
+                else
+                    return false;
+            }
+            
+            return true;
+        }
+    }
+}
+
+//HashSet save visited course
+//0==>1,2
+//1==>2
+//2 ==>3
+//3==>[]
+//0 ==> 1 if(need course is in visited, false)

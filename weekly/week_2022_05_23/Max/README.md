@@ -3,7 +3,7 @@
 | Date | Day | Status |
 | ----------- | ----------- | ----------- |
 | 05/23 | Monday | 请假 |
-| 05/24 | Tuesday | [Not yet](#0524) |
+| 05/24 | Tuesday | [Done](#0524) |
 | 05/25 | Wednesday | [Not yet](#0525) |
 | 05/26 | Thursday | [Not yet](#0526) |
 | 05/27 | Friday | [Not yet](#0527) |

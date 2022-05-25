@@ -4,7 +4,9 @@
 | ----------- | ----------- | ----------- |
 | 05/18 | Wednesday | [Done](#0518) |
 | 05/19 | Thursday | [Done](#0519) |
-| 05/19 | Friday | [Done](#0520) |
+| 05/20 | Friday | [Done](#0520) |
+| 05/21 | Saturday | [Done](#0521) |
+| 05/22 | Sunday | [Done](#0522) |
 
 # 05/18
 
@@ -126,6 +128,62 @@ class Solution {
             }
         }
         return left;
+    }
+}
+```
+
+# 05/21
+
+## 11. [Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+
+Two pointer
+
+Time complexity: O(n)
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int maxWater = 0;
+        while (left < right) {
+            int water = Math.min(height[left], height[right]) * (right - left);
+            maxWater = Math.max(water, maxWater);
+            if (height[left] < height[right])
+                left++;
+            else
+                right--;
+        }
+        return maxWater;
+    }
+}
+```
+
+# 05/22
+
+## 39. [Combination Sum](https://leetcode.com/problems/combination-sum/)
+
+```java
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        backtrack(candidates, target, 0);
+        return res;
+    }
+    
+    List<Integer> track = new ArrayList<>();
+    public void backtrack(int[] candidates, int target, int index) {
+        if (target == 0) {
+            res.add(new ArrayList<>(track));
+            return;
+        }
+        if (target < 0) {
+            return;
+        }
+        for (int i = index; i < candidates.length; i++) {
+            track.add(candidates[i]);
+            backtrack(candidates, target - candidates[i], i);
+            track.remove(track.size() - 1);
+        }
     }
 }
 ```
